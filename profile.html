@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile Push</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen">
+
+<header class="p-6 border-b border-white/10">
+  <a href="index.html" class="text-indigo-400">← Back</a>
+  <h1 class="text-2xl font-bold mt-2">Profile Push</h1>
+</header>
+
+<main class="max-w-3xl mx-auto p-8 space-y-4">
+  <input id="identity" placeholder="Identity" class="w-full p-3 bg-slate-900 border border-slate-700" />
+  <input id="email" placeholder="Email" class="w-full p-3 bg-slate-900 border border-slate-700" />
+  <input id="phone" placeholder="Phone" class="w-full p-3 bg-slate-900 border border-slate-700" />
+
+  <h3 class="font-semibold mt-6">Custom User Properties</h3>
+  <div id="props"></div>
+
+  <button type="button" onclick="addProp()" class="bg-slate-700 px-4 py-2 rounded">
+    + Add Property
+  </button>
+
+  <button type="button" onclick="pushProfile()" class="bg-indigo-600 px-6 py-3 rounded font-semibold">
+    Push Profile
+  </button>
+</main>
+
+<script src="ct.js"></script>
+</body>
+</html>
