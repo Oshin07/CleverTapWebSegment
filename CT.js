@@ -27,10 +27,11 @@ function addProp() {
 }
 
 /**
- * Collect properties dynamically
+ * Collect dynamic properties
  */
 function collectProps() {
   const props = {};
+
   document.querySelectorAll('#props > div').forEach(row => {
     const key = row.children[0].value.trim();
     let value = row.children[1].value;
@@ -49,11 +50,15 @@ function collectProps() {
 }
 
 /**
- * 🔥 DYNAMIC CUSTOM EVENT (Segment)
+ * 🔥 Dynamic Segment Event
  */
 function sendEvent() {
-  const eventName = document.getElementById('eventName')?.value?.trim();
+  if (!window.analytics || !analytics.track) {
+    alert('Segment not loaded');
+    return;
+  }
 
+  const eventName = document.getElementById('eventName')?.value?.trim();
   if (!eventName) {
     alert('Event name is required');
     return;
@@ -61,8 +66,7 @@ function sendEvent() {
 
   const properties = collectProps();
 
-  console.log('Segment track →', eventName, properties);
-
+  console.log('✅ Segment track →', eventName, properties);
   analytics.track(eventName, properties);
 
   alert('Dynamic event sent via Segment');
