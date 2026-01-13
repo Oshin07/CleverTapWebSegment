@@ -1,6 +1,6 @@
-/**
- * Add dynamic property row
- */
+/*************************************************
+ * Add dynamic property row (used everywhere)
+ *************************************************/
 function addProp() {
   const container = document.getElementById('props');
   if (!container) return;
@@ -12,11 +12,9 @@ function addProp() {
   row.style.marginBottom = '10px';
 
   row.innerHTML = `
-    <input type="text" placeholder="Key"
-      style="padding:10px; background:#0f172a; border:1px solid #475569; color:white;" />
-    <input type="text" placeholder="Value"
-      style="padding:10px; background:#0f172a; border:1px solid #475569; color:white;" />
-    <select style="padding:10px; background:#0f172a; border:1px solid #475569; color:white;">
+    <input placeholder="Key" />
+    <input placeholder="Value" />
+    <select>
       <option value="string">String</option>
       <option value="number">Number</option>
       <option value="boolean">Boolean</option>
@@ -26,9 +24,9 @@ function addProp() {
   container.appendChild(row);
 }
 
-/**
+/*************************************************
  * Collect dynamic properties
- */
+ *************************************************/
 function collectProps() {
   const props = {};
 
@@ -45,13 +43,13 @@ function collectProps() {
     props[key] = value;
   });
 
-  console.log('Dynamic Event Properties:', props);
+  console.log('📦 Collected properties:', props);
   return props;
 }
 
-/**
- * 🔥 Dynamic Segment Event
- */
+/*************************************************
+ * 🔥 EVENT — works pre-login & post-login
+ *************************************************/
 function sendEvent() {
   if (!window.analytics || !analytics.track) {
     alert('Segment not loaded');
@@ -66,71 +64,80 @@ function sendEvent() {
 
   const properties = collectProps();
 
-  console.log('✅ Segment track →', eventName, properties);
+  console.log('⚡ Segment TRACK →', eventName, properties);
   analytics.track(eventName, properties);
 
-  alert('Dynamic event sent via Segment');
+  alert('Event sent via Segment');
 }
 
+/*************************************************
+ * 👤 LOGIN — creates CleverTap user
+ *************************************************/
 function loginUser() {
   if (!window.analytics || !analytics.identify) {
-    alert("Segment not loaded");
+    alert('Segment not loaded');
     return;
   }
 
-  const userId = document.getElementById("identity").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
+  const userId = document.getElementById('identity')?.value?.trim();
+  const email = document.getElementById('email')?.value?.trim();
+  const phone = document.getElementById('phone')?.value?.trim();
 
-  if (!userId) {
-    alert("Identity is required");
+  if (!userId && !email && !phone) {
+    alert('Provide at least one identity (ID / Email / Phone)');
     return;
   }
 
   const traits = {
-    email: email || undefined,
-    phone: phone || undefined,
+    ...(email && { email }),
+    ...(phone && { phone }),
     ...collectProps()
   };
 
-  console.log("✅ LOGIN → Segment IDENTIFY", userId, traits);
+  const resolvedUserId = userId || email || phone;
 
-  analytics.identify(userId, traits);
+  console.log('👤 Segment IDENTIFY (login) →', resolvedUserId, traits);
+  analytics.identify(resolvedUserId, traits);
 
-  alert("Login successful – user identified");
+  alert('Login successful — user identified');
 }
 
-/* expose globally */
-window.loginUser = loginUser;
-
-
+/*************************************************
+ * 🧬 PROFILE PUSH — updates user in CT
+ *************************************************/
 function pushProfile() {
   if (!window.analytics || !analytics.identify) {
-    alert("Segment not loaded");
+    alert('Segment not loaded');
     return;
   }
 
-  const userId = document.getElementById("identity").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
+  const userId = document.getElementById('identity')?.value?.trim();
+  const email = document.getElementById('email')?.value?.trim();
+  const phone = document.getElementById('phone')?.value?.trim();
 
-  if (!userId) {
-    alert("Identity is required");
+  if (!userId && !email && !phone) {
+    alert('Provide at least one identity (ID / Email / Phone)');
     return;
   }
 
   const traits = {
-    email: email || undefined,
-    phone: phone || undefined,
+    ...(email && { email }),
+    ...(phone && { phone }),
     ...collectProps()
   };
 
-  console.log("✅ PROFILE → Segment IDENTIFY", userId, traits);
+  const resolvedUserId = userId || email || phone;
 
-  analytics.identify(userId, traits);
+  console.log('🧬 Segment IDENTIFY (profile) →', resolvedUserId, traits);
+  analytics.identify(resolvedUserId, traits);
 
-  alert("Profile updated in Segment & CleverTap");
+  alert('Profile updated in Segment & CleverTap');
 }
 
+/*************************************************
+ * Expose globally (for inline HTML onclick)
+ *************************************************/
+window.addProp = addProp;
+window.sendEvent = sendEvent;
+window.loginUser = loginUser;
 window.pushProfile = pushProfile;
-
