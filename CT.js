@@ -71,3 +71,66 @@ function sendEvent() {
 
   alert('Dynamic event sent via Segment');
 }
+
+function loginUser() {
+  if (!window.analytics || !analytics.identify) {
+    alert("Segment not loaded");
+    return;
+  }
+
+  const userId = document.getElementById("identity").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  if (!userId) {
+    alert("Identity is required");
+    return;
+  }
+
+  const traits = {
+    email: email || undefined,
+    phone: phone || undefined,
+    ...collectProps()
+  };
+
+  console.log("✅ LOGIN → Segment IDENTIFY", userId, traits);
+
+  analytics.identify(userId, traits);
+
+  alert("Login successful – user identified");
+}
+
+/* expose globally */
+window.loginUser = loginUser;
+
+
+function pushProfile() {
+  if (!window.analytics || !analytics.identify) {
+    alert("Segment not loaded");
+    return;
+  }
+
+  const userId = document.getElementById("identity").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  if (!userId) {
+    alert("Identity is required");
+    return;
+  }
+
+  const traits = {
+    email: email || undefined,
+    phone: phone || undefined,
+    ...collectProps()
+  };
+
+  console.log("✅ PROFILE → Segment IDENTIFY", userId, traits);
+
+  analytics.identify(userId, traits);
+
+  alert("Profile updated in Segment & CleverTap");
+}
+
+window.pushProfile = pushProfile;
+
