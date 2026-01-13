@@ -73,33 +73,36 @@ function sendEvent() {
 /*************************************************
  * 👤 LOGIN — creates CleverTap user
  *************************************************/
+
 function loginUser() {
-  if (!window.analytics || !analytics.identify) {
-    alert('Segment not loaded');
+  if (!window.analytics) {
+    alert('Segment not initialized');
     return;
   }
 
-  const userId = document.getElementById('identity')?.value?.trim();
-  const email = document.getElementById('email')?.value?.trim();
-  const phone = document.getElementById('phone')?.value?.trim();
+  analytics.ready(() => {
+    const userId = document.getElementById('identity')?.value?.trim();
+    const email = document.getElementById('email')?.value?.trim();
+    const phone = document.getElementById('phone')?.value?.trim();
 
-  if (!userId && !email && !phone) {
-    alert('Provide at least one identity (ID / Email / Phone)');
-    return;
-  }
+    if (!userId && !email && !phone) {
+      alert('Provide at least one identity (ID / Email / Phone)');
+      return;
+    }
 
-  const traits = {
-    ...(email && { email }),
-    ...(phone && { phone }),
-    ...collectProps()
-  };
+    const traits = {
+      ...(email && { email }),
+      ...(phone && { phone }),
+      ...collectProps()
+    };
 
-  const resolvedUserId = userId || email || phone;
+    const resolvedUserId = userId || email || phone;
 
-  console.log('👤 Segment IDENTIFY (login) →', resolvedUserId, traits);
-  analytics.identify(resolvedUserId, traits);
+    console.log('👤 Segment IDENTIFY (login) →', resolvedUserId, traits);
+    analytics.identify(resolvedUserId, traits);
 
-  alert('Login successful — user identified');
+    alert('Login successful — user identified');
+  });
 }
 
 /*************************************************
