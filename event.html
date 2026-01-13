@@ -1,8 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Custom Event</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ✅ Segment Web SDK (REQUIRED on this page) -->
+  <script>
+  !function(){
+    var analytics=window.analytics=window.analytics||[];
+    if(!analytics.initialize)
+      if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");
+      else{
+        analytics.invoked=true;
+        analytics.methods=["track","page","identify","group","alias","ready","reset","getAnonymousId"];
+        analytics.factory=function(t){
+          return function(){
+            var e=Array.prototype.slice.call(arguments);
+            e.unshift(t);
+            analytics.push(e);
+            return analytics;
+          };
+        };
+        for(var t=0;t<analytics.methods.length;t++){
+          var e=analytics.methods[t];
+          analytics[e]=analytics.factory(e);
+        }
+        analytics.load=function(t){
+          var e=document.createElement("script");
+          e.type="text/javascript";
+          e.async=true;
+          e.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";
+          var n=document.getElementsByTagName("script")[0];
+          n.parentNode.insertBefore(e,n);
+        };
+        analytics.SNIPPET_VERSION="4.15.3";
+        analytics.load("rQxgn9f4AlCelsyFOpCoGSILYeuO3jSJ"); // ✅ your write key
+        analytics.page();
+      }
+  }();
+  </script>
 </head>
 
 <body class="bg-slate-950 text-white min-h-screen">
@@ -41,6 +80,8 @@
 
 </main>
 
+<!-- ✅ Your custom JS (loads AFTER Segment) -->
 <script src="ct.js"></script>
+
 </body>
 </html>
